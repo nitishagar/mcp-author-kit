@@ -1,6 +1,24 @@
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types.js";
+import {
+  CallToolRequestSchema,
+  ListToolsRequestSchema,
+} from "@modelcontextprotocol/sdk/types.js";
+import { gradeTool, gradeToolHandler } from "./tools/grade.js";
+import type { ToolDefinition, ToolResult } from "./tools/grade.js";
+
+type Handler = (args: Record<string, unknown>) => Promise<ToolResult>;
+
+export interface RegisteredTool {
+  definition: ToolDefinition;
+  handler: Handler;
+}
+
+export function getRegisteredTools(): RegisteredTool[] {
+  return [
+    { definition: gradeTool, handler: gradeToolHandler as Handler },
+  ];
+}
 
 export function createServer(): Server {
   const server = new Server(
@@ -8,9 +26,24 @@ export function createServer(): Server {
     { capabilities: { tools: {} } }
   );
 
+  const registry = new Map(
+    getRegisteredTools().map((t) => [t.definition.name, t])
+  );
+
   server.setRequestHandler(ListToolsRequestSchema, async () => ({
-    tools: [],
+    tools: Array.from(registry.values()).map((t) => t.definition),
   }));
+
+  server.setRequestHandler(CallToolRequestSchema, async (req) => {
+    const tool = registry.get(req.params.name);
+    if (!tool) {
+      return {
+        isError: true,
+        content: [{ type: "text", text: `Unknown tool: ${req.params.name}` }],
+      };
+    }
+    return tool.handler((req.params.arguments ?? {}) as Record<string, unknown>);
+  });
 
   return server;
 }
