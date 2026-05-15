@@ -1,7 +1,9 @@
 # Local-only: Claude/tmux/orchestration artifacts
 .claude/
 PLAN.md
+PLAN-*.md
 .tmuxp/
+.worktrees/
 *.local.md
 
 # Node
