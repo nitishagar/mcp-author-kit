@@ -21,4 +21,9 @@ describe("server boot", () => {
     const names = getRegisteredTools().map((t) => t.definition.name);
     expect(names).toContain("inspect_mcp_server");
   });
+
+  it("registers tail_mcp_logs in the tool registry", () => {
+    const names = getRegisteredTools().map((t) => t.definition.name);
+    expect(names).toContain("tail_mcp_logs");
+  });
 });
