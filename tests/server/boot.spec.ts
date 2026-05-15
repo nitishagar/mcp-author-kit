@@ -16,4 +16,9 @@ describe("server boot", () => {
     const names = getRegisteredTools().map((t) => t.definition.name);
     expect(names).toContain("grade_tool_description");
   });
+
+  it("registers inspect_mcp_server in the tool registry", () => {
+    const names = getRegisteredTools().map((t) => t.definition.name);
+    expect(names).toContain("inspect_mcp_server");
+  });
 });
