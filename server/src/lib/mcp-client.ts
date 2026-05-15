@@ -7,6 +7,54 @@ export interface InspectionTarget {
   env?: Record<string, string>;
 }
 
+export interface CallTarget extends InspectionTarget {
+  toolName: string;
+  arguments?: Record<string, unknown>;
+}
+
+export interface CallTargetResult {
+  response: { content: unknown[]; isError?: boolean };
+  isError: boolean;
+  elapsedMs: number;
+}
+
+async function withClient<T>(
+  target: InspectionTarget,
+  fn: (client: Client) => Promise<T>
+): Promise<T> {
+  const transport = new StdioClientTransport({
+    command: target.command,
+    args: target.args ?? [],
+    env: target.env,
+  });
+  const client = new Client(
+    { name: "mcp-author-kit-client", version: "0.2.0" },
+    { capabilities: {} }
+  );
+  try {
+    await client.connect(transport);
+    return await fn(client);
+  } finally {
+    try {
+      await client.close();
+    } catch {
+      // best-effort close
+    }
+  }
+}
+
+export async function callRemoteTool(target: CallTarget): Promise<CallTargetResult> {
+  const start = Date.now();
+  const response = await withClient(target, (client) =>
+    client.callTool({ name: target.toolName, arguments: target.arguments ?? {} })
+  );
+  return {
+    response: response as CallTargetResult["response"],
+    isError: Boolean((response as { isError?: boolean }).isError),
+    elapsedMs: Date.now() - start,
+  };
+}
+
 export interface InspectionReport {
   serverInfo: { name: string; version?: string } | null;
   tools: unknown[];
