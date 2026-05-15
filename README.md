@@ -17,10 +17,11 @@ Scaffold, grade, test, and debug MCP (Model Context Protocol) servers from insid
   - `typescript-cf-workers` — Node-stdio TS starter with the same shape; Workers deploy is a follow-on.
 - **MCP utility server** (`server/`) — a bundled MCP server that exposes:
   - `inspect_mcp_server` ✅ — boot a target server and enumerate its tools, resources, and prompts.
-  - `grade_tool_description` ✅ — rule-based scoring of tool definitions; LLM clarity pass planned.
+  - `grade_tool_description` ✅ — rule-based scoring of tool definitions (LLM clarity pass deferred to v0.2.1).
   - `tail_mcp_logs` ✅ — capture stderr from a target server for a fixed duration window.
-  - `call_mcp_tool` 🚧 — exercise a tool on a target server (planned).
-  - `generate_smoke_tests` 🚧 — produce a starter test plan for a target server (planned).
+  - `call_mcp_tool` ✅ — invoke a single tool on a target server with timing data.
+  - `generate_smoke_tests` ✅ — produce a markdown smoke-test plan from inspect + rubric.
+- **Slash command** (`commands/test-mcp.md`) — `/test-mcp` runs the full inspect → grade → smoke-plan flow and prints a one-screen report.
 
 ## Development
 
