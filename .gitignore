@@ -1,0 +1,33 @@
+# Local-only: Claude/tmux/orchestration artifacts
+.claude/
+PLAN.md
+.tmuxp/
+*.local.md
+
+# Node
+node_modules/
+dist/
+build/
+*.tsbuildinfo
+.npm/
+.pnpm-store/
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# Test
+coverage/
+.vitest-cache/

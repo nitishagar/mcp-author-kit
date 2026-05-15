@@ -1,0 +1,28 @@
+{
+  "name": "mcp-author-kit",
+  "version": "0.2.0",
+  "description": "Scaffold, grade, test, and debug MCP servers from inside Cursor.",
+  "type": "module",
+  "private": true,
+  "license": "MIT",
+  "author": "Nitish Agarwal",
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "pnpm@9.12.0",
+  "scripts": {
+    "build": "tsc -p server/tsconfig.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit && tsc -p server/tsconfig.json --noEmit",
+    "start": "node server/dist/index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.0.4"
+  },
+  "devDependencies": {
+    "@types/node": "20.14.10",
+    "typescript": "5.6.3",
+    "vitest": "2.1.8"
+  }
+}
