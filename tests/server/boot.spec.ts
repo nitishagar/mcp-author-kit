@@ -31,4 +31,9 @@ describe("server boot", () => {
     const names = getRegisteredTools().map((t) => t.definition.name);
     expect(names).toContain("call_mcp_tool");
   });
+
+  it("registers generate_smoke_tests in the tool registry", () => {
+    const names = getRegisteredTools().map((t) => t.definition.name);
+    expect(names).toContain("generate_smoke_tests");
+  });
 });

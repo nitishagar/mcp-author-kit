@@ -9,6 +9,7 @@ import type { ToolDefinition, ToolResult } from "./tools/grade.js";
 import { inspectTool, inspectToolHandler } from "./tools/inspect.js";
 import { tailTool, tailToolHandler } from "./tools/tail.js";
 import { callTool, callToolHandler } from "./tools/call.js";
+import { smokeTool, smokeToolHandler } from "./tools/smoke.js";
 
 type Handler = (args: Record<string, unknown>) => Promise<ToolResult>;
 
@@ -23,6 +24,7 @@ export function getRegisteredTools(): RegisteredTool[] {
     { definition: inspectTool, handler: inspectToolHandler as Handler },
     { definition: tailTool, handler: tailToolHandler as Handler },
     { definition: callTool, handler: callToolHandler as Handler },
+    { definition: smokeTool, handler: smokeToolHandler as Handler },
   ];
 }
 
