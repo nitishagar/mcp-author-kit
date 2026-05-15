@@ -2,6 +2,7 @@
 .claude/
 PLAN.md
 PLAN-*.md
+HANDOFF.md
 .tmuxp/
 .worktrees/
 *.local.md
