@@ -30,9 +30,17 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
   ],
 }));
 
-server.setRequestHandler(CallToolRequestSchema, async (req) => ({
-  content: [{ type: "text", text: String(req.params.arguments?.msg ?? "") }],
-}));
+server.setRequestHandler(CallToolRequestSchema, async (req) => {
+  if (req.params.name !== "echo") {
+    return {
+      isError: true,
+      content: [{ type: "text", text: `Unknown tool: ${req.params.name}` }],
+    };
+  }
+  return {
+    content: [{ type: "text", text: String(req.params.arguments?.msg ?? "") }],
+  };
+});
 
 server.setRequestHandler(ListResourcesRequestSchema, async () => ({
   resources: [
