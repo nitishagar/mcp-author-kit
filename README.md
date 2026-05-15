@@ -6,14 +6,21 @@ Scaffold, grade, test, and debug MCP (Model Context Protocol) servers from insid
 
 ## What's in the box
 
-- **Skills** (`skills/`) — agent guidance for scaffolding, designing, testing, and debugging MCP servers.
-- **Templates** (`templates/`) — ready-to-clone Python (stdio) and TypeScript (Cloudflare Workers) starter projects.
+- **Skills** (`skills/`) — five agent skills covering scaffolding, designing, testing, and debugging MCP servers:
+  - `scaffolding-mcp-server-python` — copy the Python stdio template into a workspace and bring it to a green smoke test.
+  - `scaffolding-mcp-server-typescript` — same shape, TypeScript starter.
+  - `designing-mcp-tool-descriptions` — rubric-driven loop to fix tool descriptions until they score ≥ 85.
+  - `testing-mcp-server-locally` — five-step end-to-end smoke test using the bundled tools.
+  - `debugging-mcp-server` — triage failing servers via stderr capture, schema introspection, malformed inputs.
+- **Templates** (`templates/`) — minimal, bootable starters:
+  - `python-stdio` — `pyproject.toml` + `__main__.py` with a working `echo` tool and stderr-safe logging.
+  - `typescript-cf-workers` — Node-stdio TS starter with the same shape; Workers deploy is a follow-on.
 - **MCP utility server** (`server/`) — a bundled MCP server that exposes:
-  - `inspect_mcp_server` — boot a target server and enumerate its tools, resources, and prompts.
-  - `call_mcp_tool` — exercise a tool on a target server.
-  - `grade_tool_description` — rule-based scoring of tool definitions, plus an optional LLM clarity pass.
-  - `generate_smoke_tests` — produce a starter test plan for a target server.
-  - `tail_mcp_logs` — capture stderr and structured events from a target server.
+  - `inspect_mcp_server` ✅ — boot a target server and enumerate its tools, resources, and prompts.
+  - `grade_tool_description` ✅ — rule-based scoring of tool definitions; LLM clarity pass planned.
+  - `tail_mcp_logs` ✅ — capture stderr from a target server for a fixed duration window.
+  - `call_mcp_tool` 🚧 — exercise a tool on a target server (planned).
+  - `generate_smoke_tests` 🚧 — produce a starter test plan for a target server (planned).
 
 ## Development
 
