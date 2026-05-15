@@ -6,6 +6,7 @@ import {
 } from "@modelcontextprotocol/sdk/types.js";
 import { gradeTool, gradeToolHandler } from "./tools/grade.js";
 import type { ToolDefinition, ToolResult } from "./tools/grade.js";
+import { inspectTool, inspectToolHandler } from "./tools/inspect.js";
 
 type Handler = (args: Record<string, unknown>) => Promise<ToolResult>;
 
@@ -17,6 +18,7 @@ export interface RegisteredTool {
 export function getRegisteredTools(): RegisteredTool[] {
   return [
     { definition: gradeTool, handler: gradeToolHandler as Handler },
+    { definition: inspectTool, handler: inspectToolHandler as Handler },
   ];
 }
 
