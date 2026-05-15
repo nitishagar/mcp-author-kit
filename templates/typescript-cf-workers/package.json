@@ -1,0 +1,23 @@
+{
+  "name": "your-mcp-server",
+  "version": "0.1.0",
+  "description": "An MCP server scaffolded by mcp-author-kit.",
+  "type": "module",
+  "private": true,
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "deploy": "wrangler deploy"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.0.4"
+  },
+  "devDependencies": {
+    "@types/node": "20.14.10",
+    "typescript": "5.6.3"
+  }
+}
