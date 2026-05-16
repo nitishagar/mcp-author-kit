@@ -15,7 +15,7 @@ describe("plugin manifest", () => {
 
   it("declares author, homepage, and license", () => {
     expect(manifest.author?.name).toBe("Nitish Agarwal");
-    expect(manifest.homepage).toBe("https://github.com/nitishagar/mcp-author-kit");
+    expect(manifest.homepage).toBe("https://nitishagar.github.io/mcp-author-kit/");
     expect(manifest.license).toBe("MIT");
   });
 

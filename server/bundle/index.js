@@ -5273,6 +5273,57 @@ var StdioServerTransport = class {
   }
 };
 
+// server/src/lib/clarity.ts
+var VAGUE_REFERENT_PATTERNS = [
+  /\bit does\b/i,
+  /\breturns it\b/i,
+  /\bthis thing\b/i,
+  /\bthe thing\b/i,
+  /\bdoes the thing\b/i,
+  /\bdo the thing\b/i
+];
+var PASSIVE_PATTERN = /\b(is|are|was|were|be|been|being)\s+(\w+ed|searched|returned|filtered|modified|created|deleted|updated|fetched|written)\b/gi;
+var ACRONYM_PATTERN = /\b[A-Z]{3,}\b/g;
+var ACRONYM_INTRO_NEAR = (acr) => new RegExp(`\\b${acr}\\b\\s*\\([^)]+\\)|\\b\\([^)]*${acr}[^)]*\\)`);
+function clarityIssues(tool) {
+  const out = [];
+  const desc = tool.description ?? "";
+  if (desc.trim().length === 0) return out;
+  if (VAGUE_REFERENT_PATTERNS.some((re) => re.test(desc))) {
+    out.push({
+      ruleId: "clarity-vague-referent",
+      severity: "warn",
+      points: 8,
+      message: 'Description uses vague referents (e.g. "it", "the thing", "does the thing"). Agents route on concrete nouns; replace with the actual entity.',
+      fix: 'Rewrite each "it" / "the thing" with the specific noun (ticket, file, message, \u2026).'
+    });
+  }
+  const passiveMatches = desc.match(PASSIVE_PATTERN) ?? [];
+  if (passiveMatches.length >= 2) {
+    out.push({
+      ruleId: "clarity-passive-voice",
+      severity: "warn",
+      points: 6,
+      message: `Description is heavily passive (${passiveMatches.length} passive constructions). Agents route better on active-voice triggers ("Use when the user asks\u2026").`,
+      fix: "Rewrite passive clauses in active voice with an explicit subject."
+    });
+  }
+  const acronyms = new Set(desc.match(ACRONYM_PATTERN) ?? []);
+  const unintroduced = [...acronyms].filter(
+    (a) => !ACRONYM_INTRO_NEAR(a).test(desc) && a !== "JSON" && a !== "MCP" && a !== "API" && a !== "HTTP" && a !== "URL" && a !== "URI"
+  );
+  if (unintroduced.length > 0) {
+    out.push({
+      ruleId: "clarity-unexplained-acronyms",
+      severity: "info",
+      points: 3,
+      message: `Description contains unexplained acronyms: ${unintroduced.join(", ")}. Agents (and humans) route worse on undefined jargon.`,
+      fix: 'Spell out the acronym on first use, e.g. "customer relationship management (CRM)".'
+    });
+  }
+  return out;
+}
+
 // server/src/lib/rubric.ts
 var VAGUE_VERBS = /* @__PURE__ */ new Set([
   "do",
@@ -5448,8 +5499,11 @@ var RULES = [
   nameNotSnakeCase,
   nameVagueVerb
 ];
-function gradeToolDescription(tool) {
+function gradeToolDescription(tool, options = {}) {
   const issues = RULES.flatMap((r) => r.run(tool));
+  if (options.withClarity) {
+    issues.push(...clarityIssues(tool));
+  }
   issues.sort((a, b) => b.points - a.points);
   const totalDeduction = issues.reduce((sum, i) => sum + i.points, 0);
   const score = Math.max(0, 100 - totalDeduction);
@@ -5468,6 +5522,10 @@ var gradeTool = {
       input_schema: {
         type: "object",
         description: "The tool's JSON Schema object describing its arguments."
+      },
+      with_llm_clarity: {
+        type: "boolean",
+        description: "Optional. When true, runs an additional clarity heuristic pass (vague referents, passive voice, unexplained acronyms). Defaults to false. The flag is named for forward-compatibility with a future MCP-sampling-backed implementation; today it is purely deterministic."
       }
     },
     required: ["name", "description", "input_schema"]
@@ -5489,7 +5547,8 @@ async function gradeToolHandler(args) {
       ]
     };
   }
-  const result = gradeToolDescription(args);
+  const withClarity = args.with_llm_clarity === true;
+  const result = gradeToolDescription(args, { withClarity });
   return {
     content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
   };

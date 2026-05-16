@@ -28,13 +28,21 @@ export const gradeTool: ToolDefinition = {
         type: "object",
         description: "The tool's JSON Schema object describing its arguments.",
       },
+      with_llm_clarity: {
+        type: "boolean",
+        description:
+          "Optional. When true, runs an additional clarity heuristic pass " +
+          "(vague referents, passive voice, unexplained acronyms). Defaults to false. " +
+          "The flag is named for forward-compatibility with a future MCP-sampling-backed " +
+          "implementation; today it is purely deterministic.",
+      },
     },
     required: ["name", "description", "input_schema"],
   },
 };
 
 export async function gradeToolHandler(
-  args: Partial<ToolDescriptor>
+  args: Partial<ToolDescriptor> & { with_llm_clarity?: unknown }
 ): Promise<ToolResult> {
   const missing: string[] = [];
   if (typeof args?.name !== "string") missing.push("name");
@@ -54,7 +62,8 @@ export async function gradeToolHandler(
     };
   }
 
-  const result = gradeToolDescription(args as ToolDescriptor);
+  const withClarity = args.with_llm_clarity === true;
+  const result = gradeToolDescription(args as ToolDescriptor, { withClarity });
   return {
     content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
   };

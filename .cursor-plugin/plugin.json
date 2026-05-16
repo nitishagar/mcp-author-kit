@@ -1,12 +1,12 @@
 {
   "name": "mcp-author-kit",
   "description": "Scaffold, grade, test, and debug MCP servers from inside Cursor. Includes skills, ready-to-clone templates, and an MCP utility server.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": {
     "name": "Nitish Agarwal",
     "url": "https://medium.com/@nitishagar"
   },
-  "homepage": "https://github.com/nitishagar/mcp-author-kit",
+  "homepage": "https://nitishagar.github.io/mcp-author-kit/",
   "repository": "https://github.com/nitishagar/mcp-author-kit",
   "license": "MIT",
   "keywords": ["mcp", "model-context-protocol", "agents", "ai", "skills", "testing"],

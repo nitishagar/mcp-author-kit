@@ -1,3 +1,5 @@
+import { clarityIssues } from "./clarity.js";
+
 export type Severity = "error" | "warn" | "info";
 
 export interface SchemaProperty {
@@ -238,8 +240,18 @@ const RULES: Rule[] = [
   nameVagueVerb,
 ];
 
-export function gradeToolDescription(tool: ToolDescriptor): GradeResult {
+export interface GradeOptions {
+  withClarity?: boolean;
+}
+
+export function gradeToolDescription(
+  tool: ToolDescriptor,
+  options: GradeOptions = {}
+): GradeResult {
   const issues = RULES.flatMap((r) => r.run(tool));
+  if (options.withClarity) {
+    issues.push(...clarityIssues(tool));
+  }
   issues.sort((a, b) => b.points - a.points);
   const totalDeduction = issues.reduce((sum, i) => sum + i.points, 0);
   const score = Math.max(0, 100 - totalDeduction);
