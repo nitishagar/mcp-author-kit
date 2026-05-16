@@ -3,7 +3,7 @@ description: Scaffold, grade, test, and debug MCP servers from inside Cursor.
 baseurl: "/mcp-author-kit"
 url: "https://nitishagar.github.io"
 theme: jekyll-theme-minimal
-logo: /mcp-author-kit/assets/logo.png
+logo: /assets/logo.png
 markdown: kramdown
 kramdown:
   syntax_highlighter: rouge
