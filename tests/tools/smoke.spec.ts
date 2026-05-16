@@ -1,6 +1,10 @@
 import { describe, it, expect } from "vitest";
 import { resolve } from "node:path";
-import { generateSmokeTests } from "../../server/src/lib/smoke.js";
+import {
+  generateSmokeTests,
+  nearMissNegativeFor,
+  NEGATIVE_TEMPLATES,
+} from "../../server/src/lib/smoke.js";
 import { smokeTool, smokeToolHandler } from "../../server/src/tools/smoke.js";
 
 const FIXTURE = resolve(__dirname, "..", "fixtures", "echo-server.mjs");
@@ -26,6 +30,43 @@ describe("generateSmokeTests against the echo fixture", () => {
     expect(typeof echo!.score).toBe("number");
     expect(echo!.score).toBeGreaterThan(0);
   }, 15_000);
+
+  it("emits at least 2 negative prompts per tool, with one near-miss derived from the tool name and one generic baseline", async () => {
+    const plan = await generateSmokeTests({ command: "node", args: [FIXTURE] });
+    const echo = plan.tools.find((t) => t.name === "echo");
+    expect(echo).toBeDefined();
+    expect(echo!.negativePrompts.length).toBeGreaterThanOrEqual(2);
+
+    // Near-miss: tied to "echo" — log/print/broadcast verbs.
+    const hasNearMiss = echo!.negativePrompts.some(
+      (p) =>
+        /log|print|broadcast/i.test(p) &&
+        !NEGATIVE_TEMPLATES.includes(p)
+    );
+    expect(hasNearMiss).toBe(true);
+
+    // Generic baseline: at least one prompt drawn from the constant.
+    const hasGeneric = echo!.negativePrompts.some((p) =>
+      NEGATIVE_TEMPLATES.includes(p)
+    );
+    expect(hasGeneric).toBe(true);
+  }, 15_000);
+});
+
+describe("nearMissNegativeFor (pure helper)", () => {
+  it("returns a deterministic antonym-driven prompt for a known verb (create_user → delete)", () => {
+    const out = nearMissNegativeFor({ name: "create_user" });
+    expect(typeof out).toBe("string");
+    expect(out.length).toBeGreaterThan(0);
+    expect(/delete/i.test(out)).toBe(true);
+    expect(NEGATIVE_TEMPLATES).not.toContain(out);
+  });
+
+  it("returns a tool-named generic for unknown verbs that is distinct from the baseline templates", () => {
+    const out = nearMissNegativeFor({ name: "frobnicate_widget" });
+    expect(NEGATIVE_TEMPLATES).not.toContain(out);
+    expect(out.length).toBeGreaterThan(0);
+  });
 });
 
 describe("generate_smoke_tests MCP tool", () => {
