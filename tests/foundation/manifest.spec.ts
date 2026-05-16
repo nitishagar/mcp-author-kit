@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync, statSync } from "node:fs";
 import { resolve } from "node:path";
 
 const root = resolve(__dirname, "..", "..");
@@ -24,6 +24,18 @@ describe("plugin manifest", () => {
       expect.arrayContaining(["mcp", "model-context-protocol"])
     );
   });
+
+  it("declares a public repository URL", () => {
+    expect(manifest.repository).toMatch(/^https:\/\//);
+  });
+
+  it("references a relative logo path that exists and is non-empty", () => {
+    expect(manifest.logo).toBeTypeOf("string");
+    expect(manifest.logo).not.toMatch(/^[/]|^https?:|\.\.\//);
+    const logoPath = resolve(root, manifest.logo);
+    expect(existsSync(logoPath)).toBe(true);
+    expect(statSync(logoPath).size).toBeGreaterThan(0);
+  });
 });
 
 describe("mcp.json", () => {
@@ -35,7 +47,7 @@ describe("mcp.json", () => {
       transport: "stdio",
     });
     expect(mcp.mcpServers["mcp-author-kit"].args).toContain(
-      "./server/dist/index.js"
+      "./server/bundle/index.js"
     );
   });
 });

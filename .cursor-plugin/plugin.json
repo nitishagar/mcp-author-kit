@@ -7,6 +7,8 @@
     "url": "https://medium.com/@nitishagar"
   },
   "homepage": "https://github.com/nitishagar/mcp-author-kit",
+  "repository": "https://github.com/nitishagar/mcp-author-kit",
   "license": "MIT",
-  "keywords": ["mcp", "model-context-protocol", "agents", "ai", "skills", "testing"]
+  "keywords": ["mcp", "model-context-protocol", "agents", "ai", "skills", "testing"],
+  "logo": "assets/logo.png"
 }

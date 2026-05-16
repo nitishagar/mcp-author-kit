@@ -12,16 +12,23 @@
   "packageManager": "pnpm@9.12.0",
   "scripts": {
     "build": "tsc -p server/tsconfig.json",
+    "bundle": "esbuild server/src/index.ts --bundle --platform=node --format=esm --outfile=server/bundle/index.js --banner:js=\"#!/usr/bin/env node\" --packages=bundle",
+    "smoke:boot": "node scripts/smoke-boot.mjs",
+    "verify:local": "pnpm bundle && node scripts/verify-local.mjs",
+    "install:dev": "node scripts/install-dev.mjs",
+    "uninstall:dev": "node scripts/uninstall-dev.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit && tsc -p server/tsconfig.json --noEmit",
-    "start": "node server/dist/index.js"
+    "release-check": "pnpm typecheck && pnpm test && pnpm bundle && pnpm smoke:boot",
+    "start": "node server/bundle/index.js"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.0.4"
   },
   "devDependencies": {
     "@types/node": "20.14.10",
+    "esbuild": "0.24.0",
     "typescript": "5.6.3",
     "vitest": "2.1.8"
   }
