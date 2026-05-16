@@ -7,10 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Deferred to v0.2.1
-- GitHub Pages docs site (Phase 6 of the marketplace plan); marketplace `Website URL` left blank for v0.2.0 submission and will be filled in once Pages ships.
-- `--with-llm-clarity` extension to `grade_tool_description`.
-- Any cosmetic output issues surfaced during the v0.2.0 Cursor demo that were not blockers.
+### Deferred to v0.3
+- LLM-backed clarity pass via MCP sampling. The `with_llm_clarity` flag landed in v0.2.1 with a deterministic heuristic implementation; the sampling-backed version is tracked separately.
+
+## [0.2.1] — 2026-05-16
+
+### Added
+- GitHub Pages docs site under `/docs` (Jekyll, theme `jekyll-theme-minimal`). Live at https://nitishagar.github.io/mcp-author-kit/. Includes a landing page, a tool reference page per MCP tool, a skills walkthrough, the rubric reference (rules + weights + pass/fail examples), and a `/test-mcp` tutorial.
+- `with_llm_clarity` flag on `grade_tool_description`. When set to `true`, runs three additional heuristic checks: `clarity-vague-referent`, `clarity-passive-voice`, `clarity-unexplained-acronyms`. Default is `false`. The flag is named for forward-compatibility with a future MCP-sampling-backed implementation; today it is purely deterministic.
+- README docs badge linking to the Pages site.
+
+### Changed
+- `.cursor-plugin/plugin.json` `homepage` now points at the docs site (was the GitHub repo URL). `repository` still points at GitHub.
 
 ## [0.2.0] — 2026-05-16
 

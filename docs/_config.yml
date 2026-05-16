@@ -1,0 +1,17 @@
+title: mcp-author-kit
+description: Scaffold, grade, test, and debug MCP servers from inside Cursor.
+baseurl: "/mcp-author-kit"
+url: "https://nitishagar.github.io"
+theme: jekyll-theme-minimal
+logo: /mcp-author-kit/assets/logo.png
+markdown: kramdown
+kramdown:
+  syntax_highlighter: rouge
+  input: GFM
+github:
+  repository_url: https://github.com/nitishagar/mcp-author-kit
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - vendor
+  - node_modules

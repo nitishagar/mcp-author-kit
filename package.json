@@ -1,6 +1,6 @@
 {
   "name": "mcp-author-kit",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Scaffold, grade, test, and debug MCP servers from inside Cursor.",
   "type": "module",
   "private": true,

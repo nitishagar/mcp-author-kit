@@ -8,6 +8,7 @@
 
 [![Node 20+](https://img.shields.io/badge/node-%3E%3D20-brightgreen)](https://nodejs.org)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+[![Docs](https://img.shields.io/badge/docs-online-blue)](https://nitishagar.github.io/mcp-author-kit/)
 
 ## Installation
 
