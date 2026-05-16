@@ -6160,6 +6160,37 @@ var NEGATIVE_TEMPLATES = [
   "Summarise the latest US tax code changes.",
   "Refactor this Python function for readability."
 ];
+var NEAR_MISS_BY_VERB = {
+  echo: () => "Log this message to the console.",
+  log: (n) => `Print the ${n || "value"} to stdout instead.`,
+  print: (n) => `Log the ${n || "value"} to a file instead.`,
+  create: (n) => `Delete the ${n || "record"} instead.`,
+  add: (n) => `Remove the ${n || "item"} instead.`,
+  insert: (n) => `Remove the ${n || "row"} instead.`,
+  make: (n) => `Destroy the ${n || "thing"} instead.`,
+  get: (n) => `Update the ${n || "record"} instead.`,
+  read: (n) => `Update the ${n || "record"} instead.`,
+  list: (n) => `Update the ${n || "record"} instead.`,
+  fetch: (n) => `Update the ${n || "record"} instead.`,
+  show: (n) => `Update the ${n || "record"} instead.`,
+  delete: (n) => `Restore the ${n || "record"} instead.`,
+  remove: (n) => `Restore the ${n || "record"} instead.`,
+  drop: (n) => `Restore the ${n || "record"} instead.`,
+  update: (n) => `Read the ${n || "record"} instead.`,
+  set: (n) => `Read the ${n || "value"} instead.`,
+  start: (n) => `Stop the ${n || "process"} instead.`,
+  stop: (n) => `Start the ${n || "process"} instead.`,
+  open: (n) => `Close the ${n || "handle"} instead.`,
+  close: (n) => `Open the ${n || "handle"} instead.`
+};
+function nearMissNegativeFor(tool) {
+  const parts = tool.name.split("_");
+  const verb = (parts[0] ?? tool.name).toLowerCase();
+  const noun = parts.slice(1).join(" ").toLowerCase();
+  const fn = NEAR_MISS_BY_VERB[verb];
+  if (fn) return fn(noun);
+  return `Use a different ${noun || tool.name} tool instead.`;
+}
 function positivePromptsFor(tool) {
   const verb = tool.name.split("_")[0] ?? tool.name;
   const noun = tool.name.split("_").slice(1).join(" ") || "the input";
@@ -6206,7 +6237,7 @@ async function generateSmokeTests(target) {
       score: grade.score,
       topIssue: grade.issues[0]?.message ?? null,
       positivePrompts: positivePromptsFor(t),
-      negativePrompts: NEGATIVE_TEMPLATES.slice(0, 2)
+      negativePrompts: [nearMissNegativeFor(t), NEGATIVE_TEMPLATES[0]]
     };
   });
   return {

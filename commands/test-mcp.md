@@ -13,8 +13,9 @@ Ask the user for:
 
 - `command` — the executable that boots the target MCP server (e.g. `node`, `python`, `uvx`).
 - `args` — array of arguments to pass (e.g. `["./dist/index.js"]` or `["-m", "your_mcp_server"]`).
+- `save_path` — ask the user for a save path for the smoke plan (or confirm they want stdout-only). Collect this **upfront**, before running the sequence, so the final report can name the destination without an extra round-trip.
 
-Default `args` to `[]` if the user gives only a command.
+Default `args` to `[]` if the user gives only a command. If the user declines a save path, leave it empty and report the not-saved branch below.
 
 ## Sequence
 
@@ -39,21 +40,21 @@ Print this report verbatim to the user (substitute the bracketed values):
 [server name] — MCP smoke test
 
 ✓ Handshake OK
-✓ {N} tools / {N} resources / {N} prompts
+✓ {N} tools / {N} resources (<resource_name>, ...) / {N} prompts (<prompt_name>, ...)
 
 Rubric scores:
   • [tool_name] [score]/100  [— top issue if score < 85]
   • ...
 
-Smoke test plan:
-  Saved to <path-the-user-chose-or-stdout>
+[If save_path was provided → "Saved to <path>"]
+[Otherwise → "Plan not saved (pass a path to persist)"]
 
 Recommended next step:
   [If any tool scores < 85: "Run the designing-mcp-tool-descriptions skill on <lowest-scoring tool>."]
   [If all scores ≥ 85: "Paste the smoke plan into your repo as `tests/mcp-smoke-test-plan.md`."]
 ```
 
-If the user has not specified where to save the plan, ask them — do not write files unprompted.
+When substituting names in the resources/prompts line, list them from `report.resources[].name` and `report.prompts[].name`. If a list is empty, render `none` in place of the names. Never write files unless the user provided a `save_path` upfront.
 
 ## When not to use
 
