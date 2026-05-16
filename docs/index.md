@@ -1,6 +1,7 @@
 ---
 title: mcp-author-kit
 nav_order: 1
+permalink: /
 ---
 
 # mcp-author-kit

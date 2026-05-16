@@ -2,6 +2,7 @@
 title: grade_tool_description
 parent: Tools
 nav_order: 2
+permalink: /tools/grade/
 ---
 
 # `grade_tool_description`

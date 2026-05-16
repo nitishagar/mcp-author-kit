@@ -1,6 +1,7 @@
 ---
 title: Rubric reference
 nav_order: 4
+permalink: /rubric/
 ---
 
 # Rubric reference

@@ -2,6 +2,7 @@
 title: generate_smoke_tests
 parent: Tools
 nav_order: 5
+permalink: /tools/smoke/
 ---
 
 # `generate_smoke_tests`

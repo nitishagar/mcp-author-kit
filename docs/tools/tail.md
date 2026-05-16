@@ -2,6 +2,7 @@
 title: tail_mcp_logs
 parent: Tools
 nav_order: 3
+permalink: /tools/tail/
 ---
 
 # `tail_mcp_logs`

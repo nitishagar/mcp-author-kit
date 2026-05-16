@@ -1,6 +1,7 @@
 ---
 title: /test-mcp
 nav_order: 5
+permalink: /test-mcp/
 ---
 
 # `/test-mcp`

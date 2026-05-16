@@ -2,6 +2,7 @@
 title: call_mcp_tool
 parent: Tools
 nav_order: 4
+permalink: /tools/call/
 ---
 
 # `call_mcp_tool`

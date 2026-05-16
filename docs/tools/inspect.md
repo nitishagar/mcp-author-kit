@@ -2,6 +2,7 @@
 title: inspect_mcp_server
 parent: Tools
 nav_order: 1
+permalink: /tools/inspect/
 ---
 
 # `inspect_mcp_server`

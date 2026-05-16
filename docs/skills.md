@@ -1,6 +1,7 @@
 ---
 title: Skills
 nav_order: 3
+permalink: /skills/
 ---
 
 # Skills
